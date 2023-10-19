@@ -4,26 +4,6 @@ class Node {
     this.left = null;
     this.right = null;
   }
-
-  updateLeft(node) {
-    this.left = node;
-  }
-
-  updateRight(node) {
-    this.right = node;
-  }
-
-  getLeft() {
-    return this.left;
-  }
-
-  getRight() {
-    return this.right;
-  }
-
-  getData() {
-    return this.value;
-  }
 }
 
 const buildTree = function (arr, start, end) {
@@ -34,8 +14,8 @@ const buildTree = function (arr, start, end) {
   const mid = Math.floor((start + end) / 2);
 
   const tempRoot = new Node(arr[mid]);
-  tempRoot.updateLeft(buildTree(arr, start, mid - 1));
-  tempRoot.updateRight(buildTree(arr, mid + 1, end));
+  tempRoot.left = buildTree(arr, start, mid - 1);
+  tempRoot.right = buildTree(arr, mid + 1, end);
 
   return tempRoot;
 };
@@ -56,24 +36,36 @@ class Tree {
     this.root = buildTree(uniq, 0, uniq.length - 1);
   }
 
+  insert(value, currentNode = this.root) {
+    if (currentNode == null) {
+      return new Node(value);
+    }
+    if (currentNode.value != value) {
+      if (currentNode.value < value) {
+        currentNode.right = this.insert(value, currentNode.right);
+      } else {
+        currentNode.left = this.insert(value, currentNode.left);
+      }
+      return currentNode;
+    } else {
+      return currentNode;
+    }
+  }
+
   prettyPrint(node = this.root, prefix = "", isLeft = true) {
     if (node === null) {
       return;
     }
-    if (node.getRight() !== null) {
+    if (node.right !== null) {
       this.prettyPrint(
-        node.getRight(),
+        node.right,
         `${prefix}${isLeft ? "│   " : "    "}`,
         false
       );
     }
-    console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.getData()}`);
-    if (node.getLeft() !== null) {
-      this.prettyPrint(
-        node.getLeft(),
-        `${prefix}${isLeft ? "    " : "│   "}`,
-        true
-      );
+    console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.value}`);
+    if (node.left !== null) {
+      this.prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
     }
   }
 }
@@ -85,4 +77,9 @@ console.log(
   })
 );
 console.log(binaryTree.root);
+binaryTree.prettyPrint();
+binaryTree.insert(13);
+binaryTree.insert(14);
+binaryTree.insert(13);
+binaryTree.insert(2);
 binaryTree.prettyPrint();
