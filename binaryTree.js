@@ -40,16 +40,15 @@ class Tree {
     if (currentNode == null) {
       return new Node(value);
     }
-    if (currentNode.value != value) {
-      if (currentNode.value < value) {
-        currentNode.right = this.insert(value, currentNode.right);
-      } else {
-        currentNode.left = this.insert(value, currentNode.left);
-      }
-      return currentNode;
-    } else {
+    if (currentNode.value == value) {
       return currentNode;
     }
+    if (currentNode.value < value) {
+      currentNode.right = this.insert(value, currentNode.right);
+    } else {
+      currentNode.left = this.insert(value, currentNode.left);
+    }
+    return currentNode;
   }
 
   prettyPrint(node = this.root, prefix = "", isLeft = true) {
