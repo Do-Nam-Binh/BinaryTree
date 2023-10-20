@@ -51,6 +51,53 @@ class Tree {
     return currentNode;
   }
 
+  delete(value, currentNode = this.root) {
+    if (currentNode.value == null) return currentNode;
+
+    if (currentNode.value == value) {
+      currentNode = this.deleteNodeParser(currentNode);
+    } else if (currentNode.value < value) {
+      currentNode.right = this.delete(value, currentNode.right);
+    } else {
+      currentNode.left = this.delete(value, currentNode.left);
+    }
+    return currentNode;
+  }
+
+  deleteNodeParser(currentNode) {
+    if (currentNode.left && currentNode.right) {
+      const successorNode = this.findDeleteNode(currentNode.right);
+      currentNode.value = successorNode.value;
+      currentNode.right = this.delete(successorNode.value, currentNode.right);
+      return currentNode;
+    } else {
+      const replaceNode = currentNode.left || currentNode.right;
+      currentNode = null;
+      return replaceNode;
+    }
+  }
+
+  findDeleteNode(currentNode) {
+    let tempNode = currentNode;
+    while (tempNode.left != null) {
+      tempNode = tempNode.left;
+    }
+    return tempNode;
+  }
+
+  find(value, temp = this.root) {
+    if (temp.value == value) {
+      return temp;
+    }
+
+    if (temp.value < value) {
+      temp = this.find(value, temp.right);
+    } else {
+      temp = this.find(value, temp.left);
+    }
+    return temp;
+  }
+
   prettyPrint(node = this.root, prefix = "", isLeft = true) {
     if (node === null) {
       return;
@@ -76,9 +123,13 @@ console.log(
   })
 );
 console.log(binaryTree.root);
-binaryTree.prettyPrint();
+// binaryTree.prettyPrint();
 binaryTree.insert(13);
 binaryTree.insert(14);
 binaryTree.insert(13);
 binaryTree.insert(2);
 binaryTree.prettyPrint();
+// binaryTree.delete(66);
+// console.log(`  `);
+// binaryTree.prettyPrint();
+// console.log(binaryTree.find(66));
