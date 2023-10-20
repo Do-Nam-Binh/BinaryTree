@@ -98,6 +98,20 @@ class Tree {
     return temp;
   }
 
+  levelOrder(callbackFn) {
+    const queue = [this.root];
+    const valueArr = [];
+    while (queue.length > 0) {
+      const node = queue.shift();
+
+      callbackFn ? callbackFn(node) : valueArr.push(node.value);
+
+      const enqueueArr = [node?.left, node?.right].filter((value) => value);
+      queue.push(...enqueueArr);
+    }
+    if (valueArr.length > 0) return valueArr;
+  }
+
   prettyPrint(node = this.root, prefix = "", isLeft = true) {
     if (node === null) {
       return;
@@ -133,3 +147,5 @@ binaryTree.prettyPrint();
 // console.log(`  `);
 // binaryTree.prettyPrint();
 // console.log(binaryTree.find(66));
+// console.log(binaryTree.levelOrder());
+binaryTree.levelOrder(console.log);
