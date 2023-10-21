@@ -112,6 +112,29 @@ class Tree {
     if (valueArr.length > 0) return valueArr;
   }
 
+  inorder(callbackFn) {
+    let currentNode = this.root;
+    let prevNode;
+  }
+
+  preorder(callbackFn, currentNode = this.root, nodeArr = []) {
+    if (currentNode == null) {
+      return;
+    }
+    nodeArr.push(currentNode);
+    if (callbackFn) {
+      callbackFn(currentNode);
+    }
+    this.preorder(callbackFn, currentNode.left, nodeArr);
+    this.preorder(callbackFn, currentNode.right, nodeArr);
+    const valueArr = [];
+    nodeArr.forEach((node) => {
+      valueArr.push(node.value);
+    });
+
+    return valueArr;
+  }
+
   prettyPrint(node = this.root, prefix = "", isLeft = true) {
     if (node === null) {
       return;
@@ -131,12 +154,8 @@ class Tree {
 }
 
 let binaryTree = new Tree([1, 234, 44, 2, 66, 34, 2, 34]);
-console.log(
-  [...new Set([1, 234, 44, 2, 66, 34, 2, 34])].sort(function (a, b) {
-    return a - b;
-  })
-);
-console.log(binaryTree.root);
+
+// console.log(binaryTree.root);
 // binaryTree.prettyPrint();
 binaryTree.insert(13);
 binaryTree.insert(14);
@@ -148,4 +167,5 @@ binaryTree.prettyPrint();
 // binaryTree.prettyPrint();
 // console.log(binaryTree.find(66));
 // console.log(binaryTree.levelOrder());
-binaryTree.levelOrder(console.log);
+binaryTree.preorder(console.log);
+// binaryTree.levelOrder(console.log);
