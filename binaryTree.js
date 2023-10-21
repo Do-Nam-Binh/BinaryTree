@@ -112,9 +112,26 @@ class Tree {
     if (valueArr.length > 0) return valueArr;
   }
 
-  inorder(callbackFn) {
-    let currentNode = this.root;
-    let prevNode;
+  inorder(callbackFn, currentNode = this.root, nodeArr = []) {
+    if (currentNode == null) {
+      return;
+    }
+
+    this.inorder(callbackFn, currentNode.left, nodeArr);
+
+    nodeArr.push(currentNode);
+    if (callbackFn) {
+      callbackFn(currentNode);
+    }
+
+    this.inorder(callbackFn, currentNode.right, nodeArr);
+    const valueArr = [];
+
+    nodeArr.forEach((node) => {
+      valueArr.push(node.value);
+    });
+
+    return valueArr;
   }
 
   preorder(callbackFn, currentNode = this.root, nodeArr = []) {
@@ -127,6 +144,25 @@ class Tree {
     }
     this.preorder(callbackFn, currentNode.left, nodeArr);
     this.preorder(callbackFn, currentNode.right, nodeArr);
+    const valueArr = [];
+    nodeArr.forEach((node) => {
+      valueArr.push(node.value);
+    });
+
+    return valueArr;
+  }
+
+  postorder(callbackFn, currentNode = this.root, nodeArr = []) {
+    if (currentNode == null) {
+      return;
+    }
+
+    this.postorder(callbackFn, currentNode.left, nodeArr);
+    this.postorder(callbackFn, currentNode.right, nodeArr);
+    nodeArr.push(currentNode);
+    if (callbackFn) {
+      callbackFn(currentNode);
+    }
     const valueArr = [];
     nodeArr.forEach((node) => {
       valueArr.push(node.value);
@@ -160,6 +196,7 @@ let binaryTree = new Tree([1, 234, 44, 2, 66, 34, 2, 34]);
 binaryTree.insert(13);
 binaryTree.insert(14);
 binaryTree.insert(13);
+binaryTree.insert(5);
 binaryTree.insert(2);
 binaryTree.prettyPrint();
 // binaryTree.delete(66);
@@ -167,5 +204,6 @@ binaryTree.prettyPrint();
 // binaryTree.prettyPrint();
 // console.log(binaryTree.find(66));
 // console.log(binaryTree.levelOrder());
-binaryTree.preorder(console.log);
+// binaryTree.preorder(console.log);
+console.log(binaryTree.postorder());
 // binaryTree.levelOrder(console.log);
