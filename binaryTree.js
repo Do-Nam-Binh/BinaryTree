@@ -171,6 +171,58 @@ class Tree {
     return valueArr;
   }
 
+  height(currentNode = this.root) {
+    if (currentNode == null) {
+      return 0;
+    } else {
+      const leftHeight = this.height(currentNode.left);
+      const rightHeight = this.height(currentNode.right);
+
+      return Math.max(leftHeight, rightHeight) + 1;
+    }
+  }
+
+  depth(node, currentNode = this.root) {
+    if (currentNode == null) return -1;
+
+    let dist = -1;
+
+    if (
+      currentNode.value == node.value ||
+      // Otherwise, check if x is
+      // present in the left subtree
+      (dist = this.depth(node, currentNode.left)) >= 0 ||
+      // Otherwise, check if x is
+      // present in the right subtree
+      (dist = this.depth(node, currentNode.right)) >= 0
+    )
+      // Return depth of the node
+      return dist + 1;
+
+    return dist;
+  }
+
+  isBalanced() {
+    const leftHeight = this.height(this.root.left);
+    const rightHeight = this.height(this.root.right);
+    if (Math.abs(leftHeight - rightHeight) <= 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  rebalance() {
+    const arr = this.preorder();
+    this.root = buildTree(
+      arr.sort(function (a, b) {
+        return a - b;
+      }),
+      0,
+      arr.length - 1
+    );
+  }
+
   prettyPrint(node = this.root, prefix = "", isLeft = true) {
     if (node === null) {
       return;
@@ -189,21 +241,48 @@ class Tree {
   }
 }
 
-let binaryTree = new Tree([1, 234, 44, 2, 66, 34, 2, 34]);
+//Create binary tree
+const binaryTree = new Tree([21, 33, 99, 42, 87, 34, 22, 37, 88, 76]);
 
-// console.log(binaryTree.root);
-// binaryTree.prettyPrint();
-binaryTree.insert(13);
-binaryTree.insert(14);
-binaryTree.insert(13);
-binaryTree.insert(5);
-binaryTree.insert(2);
-binaryTree.prettyPrint();
-// binaryTree.delete(66);
-// console.log(`  `);
-// binaryTree.prettyPrint();
-// console.log(binaryTree.find(66));
-// console.log(binaryTree.levelOrder());
-// binaryTree.preorder(console.log);
-console.log(binaryTree.postorder());
-// binaryTree.levelOrder(console.log);
+//Confirm tree is balanced
+console.log("Is balanced? ", binaryTree.isBalanced());
+
+//Level order traversal
+console.log("Level order: ", binaryTree.levelOrder());
+
+//Preorder traversal
+console.log("Preorder: ", binaryTree.preorder());
+
+//Postorder traversal
+console.log("Postorder: ", binaryTree.postorder());
+
+//Inorder traversal
+console.log("Inorder: ", binaryTree.inorder());
+
+//Insert more
+binaryTree.insert(122);
+binaryTree.insert(110);
+binaryTree.insert(200);
+binaryTree.insert(322);
+
+//Confirm tree balance
+console.log("Is balanced? ", binaryTree.isBalanced());
+
+//Rebalance tree
+binaryTree.rebalance();
+console.log("Rebalanced tree");
+
+//Confirm tree balance
+console.log("Is balanced? ", binaryTree.isBalanced());
+
+//Level order traversal
+console.log("Level order: ", binaryTree.levelOrder());
+
+//Preorder traversal
+console.log("Preorder: ", binaryTree.preorder());
+
+//Postorder traversal
+console.log("Postorder: ", binaryTree.postorder());
+
+//Inorder traversal
+console.log("Inorder: ", binaryTree.inorder());
